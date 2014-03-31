@@ -19,3 +19,6 @@ let rec fibo = function
     | 1 -> 1
     | n -> (fibo (n-1)) + (fibo (n-2));;
     
+let rec sum = function
+    | (m, 0) -> m
+    | (m, n) -> m + n + sum(m, n-1);; 
