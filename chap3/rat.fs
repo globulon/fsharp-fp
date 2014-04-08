@@ -4,9 +4,9 @@ open System ;;
 
 type Qnum = int*int;;
 
-let numer = fst
+let numer: Qnum -> int = fst
 
-let denum = snd
+let denum: Qnum -> int = snd
 
 type EndoQnum = Qnum -> Qnum
 
@@ -23,3 +23,4 @@ let makeQ = function
   | (_, 0) -> failwith "rational division by zero"
   | q      -> reduce q;; 
  
+ let toString q = (string (numer q)) + "/" + (string (denum q));;
