@@ -93,4 +93,55 @@ let rec minus (xs, ys) =
     | (v::vs, w::ws) when v=w -> minus(vs,ws)
     | (v::vs, w::_) when v<w  -> v::minus(vs, ys)
     | (_, w::ws)              -> minus(xs, ws);;
-    
+
+(*4.12*)
+let rec sum p = function
+  | []              -> 0
+  | x::xs when p x  -> x + (sum p xs)
+  | _::xs           -> sum p xs;;
+  
+(*4.13*)
+let rec smallest = function
+  | []    -> failwith "empty list"
+  | [x]   -> x: int
+  | x::xs -> System.Math.Min(x, smallest xs);;
+  
+let rec delete a = function 
+  | []             -> []
+  | x::xs when x=a -> xs
+  | x::xs          -> x::(delete a xs);;
+  
+let rec naive_sort = function 
+  | [] -> []
+  | xs -> let min = smallest xs
+          min::naive_sort(delete min xs);;
+          
+(*4.14*)
+let rec findSmaller = function
+  | []    -> None
+  | [x]   -> Some x: int option
+  | x::xs -> match (findSmaller xs) with
+              | Some m -> Some(System.Math.Min(x, m))
+              | None   -> Some x;;
+
+(*4.15*)
+(*impossible to be less inefficient*)
+let rec reverse  = function 
+  | [] -> []
+  | x::xs -> reverse xs @ [x];;
+  
+let revrev l = 
+  let rec maprev = function
+                    | [] -> []
+                    | xs::rest -> (reverse xs)::(maprev rest)
+  reverse (maprev l);;
+  
+(* 4.22 *)
+type Poly = int list;;
+
+let rec multAlph coef = function
+  | [] -> []
+  | x::xs -> (coef*x)::(multAlph coef xs);;
+
+let multX xs = 0::xs;;
+
