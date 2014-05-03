@@ -47,9 +47,23 @@ let compose r s =
   
   /// transitive 
 let transitive r = 
-  let composeN n = Set.fold (fun acc _ -> compose acc r) r (Set.ofList [1..n])
-  Set.fold (fun (n, acc) _ -> (n + 1, Set.union (composeN n) acc)) (0, Set.empty) r;;
+  let composeN curr acc = let rr = compose curr r
+                          (rr, Set.union rr acc)
+  snd (Set.fold (fun (curr, acc) _ -> composeN curr acc) (r, Set.empty) r);;
   
 
 let r = Set.ofList [("a", 1); ("b",2);("c", 3); ("c", 4); ("b", 4)];;
 let s = Set.ofList [(1,2);(1,1);(2,1); (1,3)];;
+
+(*5.8*)
+let rec powset s t = 
+  match s with 
+    | _ when Set.isEmpty s -> set [t]
+    | _                    -> let m  = Set.minElement s
+                              let s' = Set.remove m s 
+                              Set.union (powset s' t) (powset s' (Set.add m t));;
+                              
+let size s = Set.fold (fun acc _ -> acc + 1) 0 s;;
+
+let allSubsets n k = Set.filter (fun s -> k = (size s)) (powset n Set.empty);;;                            
+
