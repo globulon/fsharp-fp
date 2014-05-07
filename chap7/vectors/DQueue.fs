@@ -12,5 +12,11 @@ let put a { front = xs; rear = ys } =
   { front = xs; rear = a::ys };; 
   
 let rec get                         = function   
-  | { front = x::xs; rear = ys } -> (x, { front = xs; rear = ys })
+  | q when isEmpty q             -> None
+  | { front = x::xs; rear = ys } -> Some (x, { front = xs; rear = ys })
   | { front = []; rear = ys }    -> get { front = List.rev ys; rear = [] };;
+
+
+///example in fsi
+///>let q = empty<int>;;
+///> get (put 1 q);;
