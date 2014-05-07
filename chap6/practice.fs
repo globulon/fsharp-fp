@@ -46,23 +46,54 @@ let rec D = function
   | (Exp f)   -> Mul(D f, Exp f);;
   
 (*Binary trees*)
-type BinTree<'a,'b> = | Leaf of 'a
-                      | Node of BinTree<'a,'b> * 'b * BinTree<'a,'b>;;
+///type BinTree<'a,'b> = | Leaf of 'a
+///                      | Node of BinTree<'a,'b> * 'b * BinTree<'a,'b>;;
           
-let t1 = Node(Node(Leaf 1, "cd" , Leaf 2), "ab", Leaf 3);;
+///let t1 = Node(Node(Leaf 1, "cd" , Leaf 2), "ab", Leaf 3);;
 
-let rec depth = function
-  | Leaf _         -> 0
-  | Node (l, _, r) -> 1 + depth l + depth  r;;
+///let rec depth = function
+///  | Leaf _         -> 0
+///  | Node (l, _, r) -> 1 + depth l + depth  r;;
                       
-let rec preOrder  = function 
-  | (Leaf _,  f)       -> []
-  | (Node(l, v, r), f) -> (f v)::preOrder (l,f) @ preOrder(r, f);; 
+///let rec preOrder  = function 
+///  | Leaf _        -> []
+///  | Node(l, v, r) -> v::preOrder l @ preOrder r;; 
   
-let rec inOrder  = function 
-  | (Leaf _,  f)       -> []
-  | (Node(l, v, r), f) -> inOrder (l,f) @ [(f v)] @ inOrder (r, f);; 
+///let rec inOrder  = function 
+///  | Leaf _        -> []
+///  | Node(l, v, r) -> (inOrder l) @ [v] @ (inOrder r);; 
   
-let rec postOrder  = function 
-  | (Leaf _,  f)       -> []
-  | (Node(l, v, r), f) -> postOrder(l,f) @  postOrder(r, f) @ [(f v)];; 
+///let rec postOrder  = function 
+///  | Leaf _        -> []
+///  | Node(l, v, r) -> (postOrder l) @  (postOrder r) @ [v];; 
+
+///let preFold f e t = List.fold f e (preOrder t);;
+//let preFoldBack f e t = List.foldBack f (preOrder t) e;;
+
+///let rec postFoldBack f t e =
+///  match t with
+///    | Leaf _        -> e
+///    | Node(l, v, r) -> let ex = f v e
+///                       let next = postFoldBack f r ex
+///                       postFoldBack f l next;;
+
+(*Comparable trees*)
+type BinTree<'a when 'a : comparison> = 
+  | Leaf
+  | Node of BinTree<'a> * 'a * BinTree<'a>;;;
+  
+let makeEmptyNode x = Node(Leaf, x, Leaf)  
+  
+let rec add x t = 
+  match t with
+    | Leaf                        -> makeEmptyNode x
+    | (Node(l, x', r)) when x < x'-> Node(add x l, x', r)
+    | (Node(l, x', r)) when x > x'-> Node(l, x', add x r)
+    | n                           -> n;;;
+    
+let rec contains x t = 
+  match t with 
+    | Leaf                       -> false
+    | Node(_, x', r) when x > x' -> contains x r
+    | Node(l, x', _) when x < x' -> contains x l
+    | _                          -> true;;
