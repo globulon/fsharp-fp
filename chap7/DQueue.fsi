@@ -1,6 +1,6 @@
 module DQueue
 
-type DQueue<'a>
+type DQueue<'a when 'a : equality>
 
 val empty  : DQueue<'a> 
 val isEmpty: DQueue<'a> -> bool

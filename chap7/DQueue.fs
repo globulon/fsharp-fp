@@ -1,6 +1,6 @@
 module DQueue
 
-type DQueue<'a> = { front: 'a list; rear: 'a list } 
+type DQueue<'a when 'a : equality> = { front: 'a list; rear: 'a list } 
 
 let empty                           = 
   { front = List.empty<'a>; rear = List.empty<'a> };;
